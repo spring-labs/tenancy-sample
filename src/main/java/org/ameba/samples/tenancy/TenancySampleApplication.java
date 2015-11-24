@@ -17,10 +17,11 @@ package org.ameba.samples.tenancy;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.hibernate.MultiTenancyStrategy;
+import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.dialect.H2Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -41,17 +42,18 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0
  */
 @SpringBootApplication
-@EnableJpaRepositories(basePackageClasses = TenancySampleApplication.class)
+@EnableJpaRepositories(basePackageClasses = TenancySampleApplication.class,
+        entityManagerFactoryRef = "entityManagerFactory")
 @RestController(value = TenancySampleApplication.ROOT_ENTRY)
 public class TenancySampleApplication {
 
     public static final String ROOT_ENTRY = "/catalogs";
+    @Autowired
+    private CatalogRepository repo;
+
     public static void main(String[] args) {
         SpringApplication.run(TenancySampleApplication.class, args);
     }
-
-    @Autowired
-    private CatalogRepository repo;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<CatalogEO> get() {
@@ -59,25 +61,29 @@ public class TenancySampleApplication {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void create(@RequestBody CatalogEO catalog){
+    public void create(@RequestBody CatalogEO catalog) {
         repo.save(catalog);
     }
 
     public
-    //@Bean
+    @Bean
     EntityManagerFactory entityManagerFactory(DataSource dataSource) {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setShowSql(true);
+        vendorAdapter.setShowSql(false);
+        vendorAdapter.setDatabasePlatform(H2Dialect.class.getName());
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan(TenancySampleApplication.class.getPackage().getName());
         factory.setDataSource(dataSource);
-        Map<String, String> jpaProperties = new HashMap<>();
-        jpaProperties.put("hibernate.multiTenancy", "DISCRIMINATOR");
-        jpaProperties.put("hibernate.tenant_identifier_resolver", TenantHolder.class.getName());
-        factory.setJpaPropertyMap(jpaProperties);
+        factory.getJpaPropertyMap().put(AvailableSettings.DIALECT, H2Dialect.class.getName());
+        factory.getJpaPropertyMap().put(org.hibernate.cfg.Environment.MULTI_TENANT, MultiTenancyStrategy.DISCRIMINATOR);
+//        factory.getJpaPropertyMap().put(org.hibernate.cfg.Environment.MULTI_TENANT_CONNECTION_PROVIDER, new DataSourceBasedMultiTenantConnectionProviderImpl()/*CustomMultiTenantConnectionProvider.class.getName()*/);
+        //factory.getJpaPropertyMap().put(DataSourceBasedMultiTenantConnectionProviderImpl.TENANT_IDENTIFIER_TO_USE_FOR_ANY_KEY, "Default");
+        //factory.getJpaPropertyMap().put(AvailableSettings.DATASOURCE, dataSource);
+
+        factory.getJpaPropertyMap().put(org.hibernate.cfg.Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, new TenantHolder());
         factory.afterPropertiesSet();
 
         return factory.getObject();

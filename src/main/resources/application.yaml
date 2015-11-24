@@ -1,16 +1,5 @@
 
 spring:
-
-  jpa:
-    hibernate:
-      multiTenancy:
-        DISCRIMONATOR
-      ddl-auto:
-        create
-      tenant_identifier_resolver:
-        org.ameba.samples.tenancy.TenantHolder
-
-    database-platform: org.hibernate.dialect.H2Dialect
   h2:
     console:
       enabled: true

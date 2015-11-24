@@ -18,7 +18,6 @@ package org.ameba.samples.tenancy;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0
  */
 @Entity
-@Table(name =" KATALOG")
 public class CatalogEO implements Serializable {
 
     @JsonProperty
