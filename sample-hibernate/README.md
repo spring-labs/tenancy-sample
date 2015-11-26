@@ -6,14 +6,15 @@ environment.
 
 ## Further Readings
 
-Desc | Link
-User Guide | http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197
+| Desc | Link |
+| ---- | ----:|
+| User Guide | http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197 |
 
 ## Known Issues
 
-Desc | Link
---- | ---
-Current state of dev. | https://hibernate.atlassian.net/browse/HHH-6054
+| Desc | Link |
+| ---- | ----:|
+|Current state of dev. | https://hibernate.atlassian.net/browse/HHH-6054 |
 
 ## Technologies and frameworks used:
 
