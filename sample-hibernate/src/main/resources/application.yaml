@@ -1,0 +1,10 @@
+
+spring:
+  datasource:
+    username: LEA
+    password: ALE
+    url: jdbc:postgresql:LEA
+    driver-class-name:  org.postgresql.Driver
+  h2:
+    console:
+      enabled: true

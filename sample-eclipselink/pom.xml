@@ -10,10 +10,9 @@
     </parent>
 
     <groupId>org.ameba</groupId>
-    <artifactId>tenancy-sample</artifactId>
+    <artifactId>mt-eclipselink</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
-    <packaging>pom</packaging>
     <description>A sample application to test Spring Data with Hibernate 5 and discriminator column separation.</description>
     <licenses>
         <license>
@@ -24,9 +23,9 @@
     </licenses>
     <developers>
         <developer>
-            <id>openwms</id>
-            <name>Heiko Scherrer</name>
-            <email>scherrer@openwms.org</email>
+            <id>kimcy</id>
+            <name>Anthony Egbe</name>
+            <email>anthony.egbe@abraxas.ch</email>
         </developer>
     </developers>
     <properties>
@@ -35,15 +34,29 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
+        <hibernate>5.0.3.Final</hibernate>
+        <h2.version>1.4.190</h2.version>
         <jpa-api.version>1.0.0.Final</jpa-api.version>
+        <platform-bom.version>2.0.0.BUILD-SNAPSHOT</platform-bom.version>
         <spring-data-releasetrain.version>Gosling-RELEASE</spring-data-releasetrain.version>
+        <validation-api.version>1.0.0.GA</validation-api.version>
+        <eclipselink-version>2.6.1</eclipselink-version>
 
         <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
-        <ameba-lib.version>0.9.1-SNAPSHOT</ameba-lib.version>
+        <maven-release-plugin.version>2.5</maven-release-plugin.version>
     </properties>
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <configuration>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -73,14 +86,13 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>eclipselink</artifactId>
+		</dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
-
             <!-- JavaEE dependencies -->
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
@@ -88,7 +100,14 @@
                 <version>${jpa-api.version}</version>
             </dependency>
 
-            <!-- Spring dependencies -->
+            <!-- Spring Framework >
+            <dependency>
+                <groupId>io.spring.platform</groupId>
+                <artifactId>platform-bom</artifactId>
+                <version>${platform-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency-->
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-releasetrain</artifactId>
@@ -97,12 +116,32 @@
                 <type>pom</type>
             </dependency>
 
-            <!-- 3rd party -->
             <dependency>
                 <groupId>org.ameba</groupId>
                 <artifactId>ameba-lib</artifactId>
-                <version>${ameba-lib.version}</version>
+                <version>0.9.1-SNAPSHOT</version>
             </dependency>
+             <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate}</version>
+            </dependency>
+ <!--           <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate}</version>
+            </dependency> -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+            </dependency>
+            <dependency>
+			    <groupId>org.eclipse.persistence</groupId>
+			    <artifactId>eclipselink</artifactId>
+			    <version>${eclipselink-version}</version>
+			</dependency>
+            
 
         </dependencies>
     </dependencyManagement>
@@ -113,6 +152,43 @@
         <url>https://github.com/openwms/tenancy-sample</url>
         <tag>HEAD</tag>
     </scm>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
@@ -135,9 +211,4 @@
             <url>http://repo.spring.io/milestone</url>
         </pluginRepository>
     </pluginRepositories>
-
-    <modules>
-        <module>sample-eclipselink</module>
-        <module>sample-hibernate</module>
-    </modules>
 </project>

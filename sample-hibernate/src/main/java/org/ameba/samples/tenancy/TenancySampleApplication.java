@@ -21,14 +21,16 @@ import java.util.List;
 
 import org.hibernate.MultiTenancyStrategy;
 import org.hibernate.cfg.AvailableSettings;
-import org.hibernate.dialect.H2Dialect;
+import org.hibernate.dialect.PostgreSQL9Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,8 +44,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0
  */
 @SpringBootApplication
-@EnableJpaRepositories(basePackageClasses = TenancySampleApplication.class,
-        entityManagerFactoryRef = "entityManagerFactory")
+@EnableJpaRepositories(
+        basePackageClasses = TenancySampleApplication.class,
+        entityManagerFactoryRef = "customEntityManagerFactory",
+        transactionManagerRef = "customTransactionManager")
 @RestController(value = TenancySampleApplication.ROOT_ENTRY)
 public class TenancySampleApplication {
 
@@ -67,23 +71,23 @@ public class TenancySampleApplication {
 
     public
     @Bean
-    EntityManagerFactory entityManagerFactory(DataSource dataSource) {
+    PlatformTransactionManager customTransactionManager(EntityManagerFactory entityManagerFactory) {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    public
+    @Bean
+    EntityManagerFactory customEntityManagerFactory(DataSource dataSource) {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setShowSql(false);
-        vendorAdapter.setDatabasePlatform(H2Dialect.class.getName());
+        vendorAdapter.setGenerateDdl(false);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan(TenancySampleApplication.class.getPackage().getName());
         factory.setDataSource(dataSource);
-        factory.getJpaPropertyMap().put(AvailableSettings.DIALECT, H2Dialect.class.getName());
-        factory.getJpaPropertyMap().put(org.hibernate.cfg.Environment.MULTI_TENANT, MultiTenancyStrategy.DISCRIMINATOR);
-//        factory.getJpaPropertyMap().put(org.hibernate.cfg.Environment.MULTI_TENANT_CONNECTION_PROVIDER, new DataSourceBasedMultiTenantConnectionProviderImpl()/*CustomMultiTenantConnectionProvider.class.getName()*/);
-        //factory.getJpaPropertyMap().put(DataSourceBasedMultiTenantConnectionProviderImpl.TENANT_IDENTIFIER_TO_USE_FOR_ANY_KEY, "Default");
-        //factory.getJpaPropertyMap().put(AvailableSettings.DATASOURCE, dataSource);
-
-        factory.getJpaPropertyMap().put(org.hibernate.cfg.Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, new TenantHolder());
+        factory.getJpaPropertyMap().put(AvailableSettings.DIALECT, PostgreSQL9Dialect.class.getName());
+        factory.getJpaPropertyMap().put(AvailableSettings.MULTI_TENANT, MultiTenancyStrategy.DISCRIMINATOR);
+        factory.getJpaPropertyMap().put(AvailableSettings.MULTI_TENANT_IDENTIFIER_RESOLVER, new TenantHolder());
         factory.afterPropertiesSet();
 
         return factory.getObject();

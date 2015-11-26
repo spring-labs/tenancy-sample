@@ -15,28 +15,34 @@
  */
 package org.ameba.samples.tenancy;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 
 /**
- * A Catalog.
+ * A TenantHolder.
  *
  * @author <a href="mailto:scherrer@openwms.org">Heiko Scherrer</a>
  * @version 1.0
  * @since 1.0
  */
-@Entity
-public class CatalogEO implements Serializable {
+public class TenantHolder implements CurrentTenantIdentifierResolver {
 
-    @JsonProperty
-    @Id
-    @GeneratedValue
-    private Long id;
+    private ThreadLocal<String> tenantHolder = new ThreadLocal<>();
 
-    @JsonProperty
-    private String version;
+    public void setTenant(String tenant) {
+        this.tenantHolder.set(tenant);
+    }
+    @Override
+    public String resolveCurrentTenantIdentifier() {
+        return "FIXME";
+        //return tenantHolder.get();
+    }
+
+    public void onDestroy() {
+        tenantHolder.remove();
+    }
+
+    @Override
+    public boolean validateExistingCurrentSessions() {
+        return false;
+    }
 }
