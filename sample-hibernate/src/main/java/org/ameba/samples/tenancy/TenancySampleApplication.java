@@ -79,8 +79,7 @@ public class TenancySampleApplication {
     @Bean
     EntityManagerFactory customEntityManagerFactory(DataSource dataSource) {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(false);
-
+        vendorAdapter.setGenerateDdl(false); // turn off with Discriminator strategy so far!
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan(TenancySampleApplication.class.getPackage().getName());
@@ -89,7 +88,6 @@ public class TenancySampleApplication {
         factory.getJpaPropertyMap().put(Environment.MULTI_TENANT, MultiTenancyStrategy.DISCRIMINATOR);
         factory.getJpaPropertyMap().put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, new TenantHolder());
         factory.afterPropertiesSet();
-
         return factory.getObject();
     }
 }

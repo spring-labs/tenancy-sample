@@ -27,6 +27,31 @@ When you consult the documentation you'll see that it is just a matter of config
 me wonder how it is possible to separate between entities between tenants. Furthermore the current documentation of Hibernate
 suggests that the demanded feature may exist in version 5.0 (but it does not).
 
-> DISCRIMINATOR
-  Correlates to the partitioned (discriminator) approach. It is an error to attempt to open a session without a tenant identifier using this strategy. This strategy is not yet implemented in Hibernate as of 4.0 and 4.1. Its support is planned for 5.0.
+> **DISCRIMINATOR**
+  Correlates to the partitioned (discriminator) approach. It is an error to attempt to open a session without a tenant
+  identifier using this strategy. This strategy is not yet implemented in Hibernate as of 4.0 and 4.1. Its support is planned
+  for 5.0.
 
+## How to configure
+
+In combination with Spring Data JPA you only need to configure the `LocalContainerEntityManagerFactoryBean` that is
+responsible to create an `EntityManagerFactory` where instances of `EntityManager`s are retrieved from. In a Spring Boot
+application you should define an own `LocalContainerEntityManagerFactoryBean` definition:
+
+```java
+    public
+    @Bean
+    EntityManagerFactory customEntityManagerFactory(DataSource dataSource) {
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(false); // turn off with Discriminator strategy so far!
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setJpaVendorAdapter(vendorAdapter);
+        factory.setPackagesToScan(TenancySampleApplication.class.getPackage().getName());
+        factory.setDataSource(dataSource);
+        factory.getJpaPropertyMap().put(Environment.DIALECT, PostgreSQL9Dialect.class.getName());
+        factory.getJpaPropertyMap().put(Environment.MULTI_TENANT, MultiTenancyStrategy.DISCRIMINATOR);
+        factory.getJpaPropertyMap().put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, new TenantHolder());
+        factory.afterPropertiesSet();
+        return factory.getObject();
+    }
+```

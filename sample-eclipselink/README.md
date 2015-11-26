@@ -1,4 +1,3 @@
-Tenancy Sample
+Multi-Tenancy Sample with EclipseLink
 =====================
 
-A sample application to test Spring Data GOSLING with Hibernate 5 and discriminator column separation.
