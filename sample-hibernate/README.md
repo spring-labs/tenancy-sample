@@ -60,7 +60,7 @@ As the [User Guide] points out, this should be enough to separate data by tenant
 configuration part. What do we need to configure in detail?
 
 | Parameter | Desc |
+| ---- | ----:|
 | hibernate.multiTenancy | Enum type to name the strategy that is used for multitenancy |
 | hibernate.tenant_identifier_resolver | FQN class name or class instance of the resolver to use the tenant id from |
 
- 
