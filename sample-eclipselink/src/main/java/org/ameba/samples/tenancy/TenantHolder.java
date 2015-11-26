@@ -15,8 +15,6 @@
  */
 package org.ameba.samples.tenancy;
 
-import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
-
 /**
  * A TenantHolder.
  *
@@ -24,14 +22,13 @@ import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
  * @version 1.0
  * @since 1.0
  */
-public class TenantHolder implements CurrentTenantIdentifierResolver {
+public class TenantHolder {
 
     private ThreadLocal<String> tenantHolder = new ThreadLocal<>();
 
     public void setTenant(String tenant) {
         this.tenantHolder.set(tenant);
     }
-    @Override
     public String resolveCurrentTenantIdentifier() {
         return "FIXME";
         //return tenantHolder.get();
@@ -41,8 +38,4 @@ public class TenantHolder implements CurrentTenantIdentifierResolver {
         tenantHolder.remove();
     }
 
-    @Override
-    public boolean validateExistingCurrentSessions() {
-        return false;
-    }
 }

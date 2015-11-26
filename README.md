@@ -39,10 +39,16 @@ must be shared across all tenants, whereas other data is kept dedicated to the c
 **R2**: The system must provide the functionality to create new accounts at runtime, this implies that the system must handle
 new tenants dynamically without the need of a restart or any manual interaction.
 
-## Variations
+## ORM Variations
+Multitenancy is not yet sepecified by the JPA, yet we rely on provider specific features.
+
+### Hibernate
 At first we tried to setup multitenancy data separation based on a discriminator column value with Hibernate. We started
 with reading, understanding and implementing the solution how it is described in the corresponding [chapter of the Hibernate.org User Guide]
 (http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3234 "Hibernate.org User Guide"). Further imformation
-can be found on the [Hibernate Sample README page](./sample-hibernate/README.md). Then we gave [EclipseLink](http://www.eclipse.org/eclipselink) a try
+can be found on the [Hibernate Sample README page](./sample-hibernate/README.md).
+
+### EclipseLink
+Then we gave [EclipseLink](http://www.eclipse.org/eclipselink) a try
 to find out how this feature is implemented there and what the current state of development is. The conclusion and how to configure
 EclipseLink is described [here](./sample-eclipselink/README.md)
