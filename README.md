@@ -11,20 +11,20 @@ two particular samples, one for each provider.
 ## Conclusion
 After doing some research and implemented both solutions we come to the conclusion that both providers do not match our
 projects requirements. The implementation of the Discriminator strategy in Hibernate is still under development and not
-yet finished, even it is described in the reference documentation. We had to make changes in the current version of
-Hibernate to get at least the resolution of the tenant id working. Eclipselink's Discriminator strategy implementation
+yet suitable, even it is described in the reference documentation. We had to patch the current version of
+Hibernate to at least get the resolution of the tenant id working. Eclipselink's Discriminator strategy implementation
 is much more proven and works as described, but has some shortcomings that prevent us from using it together with the
-latest Spring Data version. Details of both investigation can be found on the modules README pages.
+latest [Spring Data JPA](http://projects.spring.io/spring-data-jpa) version. Details of both investigation can be found on the modules README pages.
 
 ## Technologies and frameworks used in common:
 - Java 8
 - Spring Boot 1.3
-- Spring Data GOSLING, including Spring Data JPA
+- Spring Data GOSLING, including Spring Data JPA 1.9.0.RELEASE
 - H2 and PostgreSQL database
 
 ## Introduction in Mutlitenancy
-A brief overview on multitenancy and the three mayor strategies can be found in the [Hibernate.org reference guide](http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197
-). Separation
+A brief overview on multitenancy and the three major strategies can be found in the [Hibernate.org User Guide](http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197
+ "Hibernate.org User Guide"). Separation
 on database or schema level is sufficient for most applications. Where seperating data based on a discriminator column value is
 the more exotic variant. As often, it depends on your requirements on multitenany which strategy to use. XXX
 
