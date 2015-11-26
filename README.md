@@ -1,9 +1,6 @@
 Tenancy Sample
 =====================
 
-A sample application to test Spring Data GOSLING with Hibernate 5 and discriminator column separation.Tenancy Sample
-=====================
-
 A sample application to test Spring Data GOSLING with Hibernate 5 and discriminator column separation.
 
 This sample application shows how to setup a multitenancy application using the Discriminator column separation strategy
