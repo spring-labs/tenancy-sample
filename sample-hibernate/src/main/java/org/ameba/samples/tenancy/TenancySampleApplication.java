@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 import java.util.List;
 
 import org.hibernate.MultiTenancyStrategy;
-import org.hibernate.cfg.AvailableSettings;
+import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.PostgreSQL9Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -85,9 +85,9 @@ public class TenancySampleApplication {
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan(TenancySampleApplication.class.getPackage().getName());
         factory.setDataSource(dataSource);
-        factory.getJpaPropertyMap().put(AvailableSettings.DIALECT, PostgreSQL9Dialect.class.getName());
-        factory.getJpaPropertyMap().put(AvailableSettings.MULTI_TENANT, MultiTenancyStrategy.DISCRIMINATOR);
-        factory.getJpaPropertyMap().put(AvailableSettings.MULTI_TENANT_IDENTIFIER_RESOLVER, new TenantHolder());
+        factory.getJpaPropertyMap().put(Environment.DIALECT, PostgreSQL9Dialect.class.getName());
+        factory.getJpaPropertyMap().put(Environment.MULTI_TENANT, MultiTenancyStrategy.DISCRIMINATOR);
+        factory.getJpaPropertyMap().put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, new TenantHolder());
         factory.afterPropertiesSet();
 
         return factory.getObject();
