@@ -32,12 +32,15 @@ the more exotic strategy. As often, it depends on your requirements on multitena
 The following requirements are taken from our Stamplets project and were applied to both sample applications.
 
 **R1**: The system must separate persisted data based on tenant information (sent by the client). Some data (database tables)
-must be shared across all tenants.
+must be shared across all tenants, whereas other data is kept dedicated to the current identified tenant.
 
-**R1.1**: Log files are separated base on the tenant identifier.
+**R1.1**: Log files are separated based on the tenant identifier.
 
 **R2**: The system must provide the functionality to create new accounts at runtime, this implies that the system must handle
-new tenants dynamically
+new tenants dynamically without the need of a restart or any manual interaction.
 
 ## Variations
-At first we tried to setup multitenancy data separation based on a discriminator column value with Hibernate. The
+At first we tried to setup multitenancy data separation based on a discriminator column value with Hibernate. We started
+with reading, understanding and implementing the solution how it is described in the corresponding [chapter of the Hibernate.org User Guide]
+(http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3234 "Hibernate.org User Guide"). Further imformation
+can be found on the [Hibernate Sample README page](./sample-hibernate/README.md).
