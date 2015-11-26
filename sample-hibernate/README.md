@@ -36,7 +36,7 @@ suggests that the demanded feature may exist in version 5.0 (but it does not).
 
 In combination with Spring Data JPA you only need to configure the `LocalContainerEntityManagerFactoryBean` that is
 responsible to create an `EntityManagerFactory` where instances of `EntityManager`s are retrieved from. In a Spring Boot
-application you should define an own `LocalContainerEntityManagerFactoryBean` definition:
+application you should define your own `LocalContainerEntityManagerFactoryBean` definition:
 
 ```java
     public
@@ -55,3 +55,12 @@ application you should define an own `LocalContainerEntityManagerFactoryBean` de
         return factory.getObject();
     }
 ```
+
+As the [User Guide] points out, this should be enough to separate data by tenant information. But this is only the
+configuration part. What do we need to configure in detail?
+
+| Parameter | Desc |
+| hibernate.multiTenancy | Enum type to name the strategy that is used for multitenancy |
+| hibernate.tenant_identifier_resolver | FQN class name or class instance of the resolver to use the tenant id from |
+
+ 
