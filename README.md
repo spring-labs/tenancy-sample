@@ -1,4 +1,4 @@
-Tenancy Sample
+Multi Tenancy Sample
 =====================
 
 A sample application to test Spring Data GOSLING with Hibernate 5 and discriminator column separation.
@@ -23,20 +23,20 @@ latest [Spring Data JPA](http://projects.spring.io/spring-data-jpa) version. Det
 - H2 and PostgreSQL database
 
 ## Introduction in Mutlitenancy
-A brief overview on multitenancy and the three major strategies can be found in the [Hibernate.org User Guide](http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197
+A brief overview on multitenancy and the three major strategies is described in the [Hibernate.org User Guide](http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197
  "Hibernate.org User Guide"). Separation
-on database or schema level is sufficient for most applications. Where seperating data based on a discriminator column value is
-the more exotic variant. As often, it depends on your requirements on multitenany which strategy to use. XXX
+on Database or Schema level is sufficient for most applications. Whereas separating data based on a Discriminator column value is
+the more exotic strategy. As often, it depends on your requirements on multitenany which strategy to use.
 
 ## Sample App Requirements
-The following requirements are taken from our Stamplets project and are applied to the sample application.
+The following requirements are taken from our Stamplets project and were applied to both sample applications.
 
-R1: The system must separate persisted data based on tenant information (sent by the client). Some data (database tables)
+**R1**: The system must separate persisted data based on tenant information (sent by the client). Some data (database tables)
 must be shared across all tenants.
 
-R1.1: Log files are separated base on the tenant identifier.
+**R1.1**: Log files are separated base on the tenant identifier.
 
-R2: The system must provide the functionality to create new accounts at runtime, this implies that the system must handle
+**R2**: The system must provide the functionality to create new accounts at runtime, this implies that the system must handle
 new tenants dynamically
 
 ## Variations
