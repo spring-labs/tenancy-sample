@@ -7,13 +7,13 @@ environment.
 ## Further Readings
 
 | Desc | Link |
-| ---- | ----:|
+|:---- |:---- |
 | User Guide | http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197 |
 
 ## Known Issues
 
 | Desc | Link |
-| ---- | ----:|
+|;---- |:---- |
 |Current state of dev. | https://hibernate.atlassian.net/browse/HHH-6054 |
 
 ## Technologies and frameworks used:
@@ -56,11 +56,27 @@ application you should define your own `LocalContainerEntityManagerFactoryBean` 
     }
 ```
 
-As the [User Guide] points out, this should be enough to separate data by tenant information. But this is only the
-configuration part. What do we need to configure in detail?
+As the [User Guide[User Guide]] points out, this should be enough to separate data by tenant information. But this is only the
+configuration part. What do we need to configure in detail especially on our entity classes ?
 
 | Parameter | Desc |
-| ---- |:---- |
+|:---- |:---- |
 | hibernate.multiTenancy | Enum type to name the strategy that is used for multitenancy |
 | hibernate.tenant_identifier_resolver | FQN class name or class instance of the resolver to use the tenant id from |
+
+Currently no extra metadata on entity classes with the Hibernate solution is foreseen, that means that requirement [R1]
+(../README.md) can not be fulfilled.
+
+## Runtime Behavior
+
+With the configuration above, the application will startup, but whenever you try to execute a database call it will fail
+gracefully with a NPE:
+
+```java
+java.lang.NullPointerException: null
+	at org.hibernate.internal.AbstractSessionImpl$ContextualJdbcConnectionAccess.obtainConnection(AbstractSessionImpl.java:425) ~[hibernate-core-5.0.4.Final.jar:5.0.4.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:87) ~[hibernate-core-5.0.4.Final.jar:5.0.4.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:112) ~[hibernate-core-5.0.4.Final.jar:5.0.4.Final]
+	at org.hibernate.internal.SessionImpl.connection(SessionImpl.java:488) ~[hibernate-core-5.0.4.Final.jar:5.0.4.Final]
+```
 
