@@ -1,7 +1,7 @@
 Multi-Tenancy Sample with Hibernate
 =====================
 
-This sample application shows how to configure Hibernate to use the Discriminator separation strategy in a multitenancy
+This sample application shows how to configure Hibernate to use the Discriminator separation strategy in a multi tenant
 environment.
 
 ## Further Readings
@@ -22,10 +22,10 @@ environment.
 
 ## How it should work
 
-When you consult the documentation you'll see that it is just a matter of configuring the SessionFactory
-(resp. EntityManagerFactory) to setup Discriminator column value mapping based on tenant information. Indeed that makes
-me wonder how it is possible to separate between entities between tenants. Furthermore the current documentation of Hibernate
-suggests that the demanded feature may exist in version 5.0 (but it does not).
+When you consult the documentation you'll see that it is just a matter of configuring the `SessionFactory`
+(resp. `EntityManagerFactory`) to setup Discriminator column value mapping based on tenant information. Indeed it makes
+me wonder how it is possible to separate entities between tenants, because this must be configured on entity level instead.
+The current documentation of Hibernate suggests that the demanded feature is planned in version 5.0:
 
 > **DISCRIMINATOR**
   Correlates to the partitioned (discriminator) approach. It is an error to attempt to open a session without a tenant
