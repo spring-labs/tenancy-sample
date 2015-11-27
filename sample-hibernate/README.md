@@ -8,7 +8,7 @@ environment.
 
 | Desc | Link |
 |:---- |:---- |
-| User Guide | http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197 |
+| [User Guide](#UG) | http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197 |
 
 ## Known Issues
 
@@ -36,14 +36,14 @@ The current documentation of Hibernate suggests that the demanded feature is pla
 
 In combination with Spring Data JPA you only need to configure the `LocalContainerEntityManagerFactoryBean` that is
 responsible to create an `EntityManagerFactory` where instances of `EntityManager`s are retrieved from. In a Spring Boot
-application you should define your own `LocalContainerEntityManagerFactoryBean` definition:
+application you should override the provided `LocalContainerEntityManagerFactoryBean` bean definition as follows:
 
 ```java
     public
     @Bean
     EntityManagerFactory customEntityManagerFactory(DataSource dataSource) {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(false); // turn off with Discriminator strategy so far!
+        vendorAdapter.setGenerateDdl(false); // turn off for DISCRIMINATOR strategy!
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan(TenancySampleApplication.class.getPackage().getName());
@@ -56,7 +56,7 @@ application you should define your own `LocalContainerEntityManagerFactoryBean` 
     }
 ```
 
-As the [User Guide[User Guide]] points out, this should be enough to separate data by tenant information. But this is only the
+As the [User Guide](UG) points out, this should be enough to separate data by tenant information. But this is only the
 configuration part. What do we need to configure in detail especially on our entity classes ?
 
 | Parameter | Desc |
