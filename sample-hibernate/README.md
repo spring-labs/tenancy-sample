@@ -57,19 +57,19 @@ application you should override the provided `LocalContainerEntityManagerFactory
 ```
 
 As the [User Guide][UG] points out, this should be enough to separate data by tenant information. But this is only the
-configuration part. What do we need to configure in detail especially on our entity classes ?
+part of configuration that enables the strategy.
 
 | Parameter | Desc |
 |:---- |:---- |
-| hibernate.multiTenancy | Enum type to name the strategy that is used for multitenancy |
-| hibernate.tenant_identifier_resolver | FQN class name or class instance of the resolver to use the tenant id from |
+| `hibernate.multiTenancy` | Enum type to name the strategy that is used for multitenancy (NONE|SCHEMA|DATABASE|**DISCRIMINATOR**) |
+| `hibernate.tenant_identifier_resolver` | FQN class name or class instance of the resolver to use the tenant id from |
 
-Currently no extra metadata on entity classes with the Hibernate solution is foreseen, that means that requirement [R1]
-(../README.md) can not be fulfilled.
+With Hibernate no extra metadata on entity classes is foreseen so far. This means requirement [R1] (../README.md) can
+not be fulfilled.
 
 ## Runtime Behavior
 
-With the configuration above, the application will startup, but whenever you try to execute a database call it will fail
+With the configuration above, the application starts up, but whenever you try to execute a database call it will fail
 gracefully with a NPE:
 
 ```java
@@ -82,12 +82,25 @@ java.lang.NullPointerException: null
 
 ## Patch Required
 
-With the configuration above, Hibernate tries to obtain a jdbc connection from a `MultiTenantConnectionProvider`. But
-this fails with a NPE because a `MultiTenantConnectionProvider` is not the `ConnectionProvider` implementaion for
-environments like the Discriminator Column Value Based strategies (DCVB).
-Separating user data based on a discriminator column value does not depend on the underlying JDBC connection. In contrast a Database or Scheme separating strategy
-rely on the underlying JDBC connection, because those strategies have to modify the connection parameters itself But XXX.
-So we rely on top of this,
+Hibernate tries to obtain a JDBC connection from a `MultiTenantConnectionProvider`. But this fails with a NPE because a
+`MultiTenantConnectionProvider` is not the suited `ConnectionProvider` implementation for the Discriminator Column Value
+Based strategy (DCVB). Separating user data based on a discriminator column value does not depend on the underlying JDBC
+connection. In contrast, a Database or Schema separating strategy do rely on the JDBC connection, because those
+strategies have to setup the connection properly to point to the right database or database schema. Therefor we need to
+apply a patch to the `AbstractSessionImpl`:
+
+```java
+@@ -339,7 +339,8 @@
+ 	@Override
+ 	public JdbcConnectionAccess getJdbcConnectionAccess() {
+ 		if ( jdbcConnectionAccess == null ) {
+-			if ( MultiTenancyStrategy.NONE == factory.getSettings().getMultiTenancyStrategy() ) {
++			if ( MultiTenancyStrategy.NONE == factory.getSettings().getMultiTenancyStrategy() ||
++                    MultiTenancyStrategy.DISCRIMINATOR == factory.getSettings().getMultiTenancyStrategy()) {
+ 				jdbcConnectionAccess = new NonContextualJdbcConnectionAccess(
+ 						getEventListenerManager(),
+ 						factory.getServiceRegistry().getService( ConnectionProvider.class )
+```
 
 
 [UG]: http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197  "Hibernate.org User Guide"
