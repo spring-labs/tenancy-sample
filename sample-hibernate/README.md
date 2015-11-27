@@ -8,7 +8,7 @@ environment.
 
 | Desc | Link |
 |:---- |:---- |
-| [User Guide](#UG) | http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197 |
+| [User Guide][UG] | http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197 |
 
 ## Known Issues
 
@@ -56,7 +56,7 @@ application you should override the provided `LocalContainerEntityManagerFactory
     }
 ```
 
-As the [User Guide](UG) points out, this should be enough to separate data by tenant information. But this is only the
+As the [User Guide][UG] points out, this should be enough to separate data by tenant information. But this is only the
 configuration part. What do we need to configure in detail especially on our entity classes ?
 
 | Parameter | Desc |
@@ -89,4 +89,5 @@ Separating user data based on a discriminator column value does not depend on th
 rely on the underlying JDBC connection, because those strategies have to modify the connection parameters itself But XXX.
 So we rely on top of this,
 
-*
+
+[UG]: http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197  "Hibernate.org User Guide"
