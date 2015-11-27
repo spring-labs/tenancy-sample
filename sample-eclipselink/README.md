@@ -8,7 +8,7 @@ environment.
 
 | Desc | Link |
 |:---- |:---- |
-| [Solutions Guide, ch.14][SG] | http://www.eclipse.org/eclipselink/documentation/2.6/solutions/multitenancy.htm#CHDBJCJA |
+| Solutions Guide, ch.14 | http://www.eclipse.org/eclipselink/documentation/2.6/solutions/multitenancy.htm#CHDBJCJA |
 
 ## Technologies and frameworks used:
 
