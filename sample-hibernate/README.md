@@ -114,8 +114,8 @@ Send a POST request with request body `{"version":"7.2"}` to create a new `Catal
 insert into T_CATALOG (C_VERSION, C_PK) values ('7.2', 27354)
 ```
 Hibernate is now calling our custom implementation of `org.hibernate.context.spi.CurrentTenantIdentifierResolver` to
-get the tenant identifier but does not include consider it in the INSERT statement. For sure not, because we haven't
-configured the discriminator column.
+get the tenant identifier but does not consider it in the INSERT statement. For sure not, because we haven't
+configured any discriminator column.
 
 So what is the tenant identifier used for? It is stored in each `Session` instance and is only used by the
 `ConnectionProvider` to obtain a connection from the proper database. That means the DCVB feature is not implemented
