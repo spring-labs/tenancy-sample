@@ -82,12 +82,12 @@ java.lang.NullPointerException: null
 
 ## Patch Required
 
-Hibernate tries to obtain a JDBC connection from a `MultiTenantConnectionProvider`. But this fails with a NPE because a
+Hibernate tries to obtain a JDBC connection from a `MultiTenantConnectionProvider`. But this fails because a
 `MultiTenantConnectionProvider` is not the suited `ConnectionProvider` implementation for the Discriminator Column Value
 Based strategy (DCVB). Separating user data based on a discriminator column value does not depend on the underlying JDBC
-connection. In contrast, a Database or Schema separating strategy do rely on the JDBC connection, because those
-strategies have to setup the connection properly to point to the right database or database schema. Therefor we need to
-apply a patch to the `AbstractSessionImpl`:
+connection. In contrast, a Database or Schema separating strategy do rely on the JDBC connection, because the connection
+must be properly setup to point to the right database or database schema. We need to apply a patch to the
+`AbstractSessionImpl` to get this fixed:
 
 ```java
 @@ -339,7 +339,8 @@
@@ -102,5 +102,24 @@ apply a patch to the `AbstractSessionImpl`:
  						factory.getServiceRegistry().getService( ConnectionProvider.class )
 ```
 
+When you go through the source code of Hibernate you often find these comparisons against the `MultiTenancyStrategy`.
+Seems like multitenancy support is already considered at many places. But in fact it is not implemented finally.
+
+## Whats missing?
+
+With the patch above, we can now startup our sample, insert some test data and fetch data from the database:
+
+Send a POST request with request body `{"version":"7.2"}` to create a new `CatalogEO`.
+```
+insert into T_CATALOG (C_VERSION, C_PK) values ('7.2', 27354)
+```
+Hibernate is now calling our custom implementation of `org.hibernate.context.spi.CurrentTenantIdentifierResolver` to
+get the tenant identifier but does not include consider it in the INSERT statement. For sure not, because we haven't
+configured the discriminator column.
+
+So what is the tenant identifier used for? It is stored in each `Session` instance and is only used by the
+`ConnectionProvider` to obtain a connection from the proper database. That means the DCVB feature is not implemented
+yet. The initial JIRA task is till opened and it seems like there is still some amount of design work to do before the
+implementation can start. IMO the documentation of Hibernate 5.0 should clarify the state of development.
 
 [UG]: http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197  "Hibernate.org User Guide"

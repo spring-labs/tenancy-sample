@@ -97,12 +97,12 @@
                 <type>pom</type>
             </dependency>
 
-            <!-- 3rd party >
+            <!-- 3rd party -->
             <dependency>
                 <groupId>org.ameba</groupId>
                 <artifactId>ameba-lib</artifactId>
                 <version>${ameba-lib.version}</version>
-            </dependency-->
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
