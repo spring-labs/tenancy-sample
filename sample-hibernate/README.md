@@ -120,6 +120,6 @@ configured any discriminator column.
 So what is the tenant identifier used for? It is stored in each `Session` instance and is only used by the
 `ConnectionProvider` to obtain a connection from the proper database. That means the DCVB feature is not implemented
 yet. The initial JIRA task is till opened and it seems like there is still some amount of design work to do before the
-implementation can start. IMO the documentation of Hibernate 5.0 should clarify the state of development.
+implementation can go on. IMO the documentation of Hibernate 5.0 should clarify the state of development.
 
 [UG]: http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/#d5e3197  "Hibernate.org User Guide"
