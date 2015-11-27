@@ -26,16 +26,10 @@ public class TenantHolder {
 
     private ThreadLocal<String> tenantHolder = new ThreadLocal<>();
 
-    public void setTenant(String tenant) {
-        this.tenantHolder.set(tenant);
-    }
-    public String resolveCurrentTenantIdentifier() {
+    public static final String TENANT_ID = "Tenant";
+
+    public static String getTenant() {
         return "FIXME";
         //return tenantHolder.get();
     }
-
-    public void onDestroy() {
-        tenantHolder.remove();
-    }
-
 }

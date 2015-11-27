@@ -15,9 +15,11 @@
  */
 package org.ameba.samples.tenancy;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,16 +34,18 @@ import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
  * @since 1.0
  */
 @Entity
-//@Table(name="CatalogEO")
-@Multitenant//(value=MultitenantType.SINGLE_TABLE)
-@TenantDiscriminatorColumn(name="TENANT_ID", contextProperty="tenant.id")
+@Table(name = "T_CATALOG")
+@Multitenant
+@TenantDiscriminatorColumn(name = "C_TENANT_ID", contextProperty = TenantHolder.TENANT_ID)
 public class CatalogEO implements Serializable {
 
     @JsonProperty
     @Id
     @GeneratedValue
+    @Column(name = "C_PK")
     private Long id;
 
     @JsonProperty
+    @Column(name = "C_VERSION")
     private String version;
 }

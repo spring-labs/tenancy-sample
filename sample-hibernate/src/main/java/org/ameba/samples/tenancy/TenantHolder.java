@@ -31,6 +31,7 @@ public class TenantHolder implements CurrentTenantIdentifierResolver {
     public void setTenant(String tenant) {
         this.tenantHolder.set(tenant);
     }
+
     @Override
     public String resolveCurrentTenantIdentifier() {
         return "FIXME";

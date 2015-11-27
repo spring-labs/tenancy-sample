@@ -20,6 +20,7 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -68,42 +69,17 @@ public class TenancyEclipseLinkSampleApplication {
     }
 
     @Bean
-    public JpaVendorAdapter jpaVendorAdapter() {
-    	EclipseLinkJpaVendorAdapter jpaVendorAdapter = new EclipseLinkJpaVendorAdapter();
-        jpaVendorAdapter.setDatabase(Database.H2);
-        jpaVendorAdapter.setGenerateDdl(true);
-        jpaVendorAdapter.setShowSql(true);
-        jpaVendorAdapter.setDatabasePlatform("org.eclipse.persistence.platform.database.H2Platform");
-        return jpaVendorAdapter;
-    }
-
-    @Bean
     public EntityManagerFactory entityManagerFactory(DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setDataSource(dataSource);
-        emf.setJpaVendorAdapter(this.jpaVendorAdapter());
-        emf.setPackagesToScan(TenancyEclipseLinkSampleApplication.class.getPackage().getName());
-        emf.setJpaProperties(this.eclipseLinkProperties());
-        emf.afterPropertiesSet();
-        return emf.getObject();
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setJpaVendorAdapter(new EclipseLinkJpaVendorAdapter());
+        factory.setPackagesToScan(TenancyEclipseLinkSampleApplication.class.getPackage().getName());
+        factory.getJpaPropertyMap().put(PersistenceUnitProperties.DDL_GENERATION_MODE, PersistenceUnitProperties.DDL_DATABASE_GENERATION);
+        factory.getJpaPropertyMap().put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
+        factory.getJpaPropertyMap().put(PersistenceUnitProperties.WEAVING, "false");
+        factory.getJpaPropertyMap().put(PersistenceUnitProperties.MULTITENANT_SHARED_EMF, "false");
+        factory.getJpaPropertyMap().put(TenantHolder.TENANT_ID, TenantHolder.getTenant());
+        factory.afterPropertiesSet();
+        return factory.getObject();
     }
-
-    @Bean
-    public JpaDialect jpaDialect() {
-        return new EclipseLinkJpaDialect();
-    }
-    
-    @Bean
-    public Properties eclipseLinkProperties() {
-        Properties eclipseLinkProps = new Properties();
-        //eclipseLinkProps.setProperty("eclipselink.ddl-generation", "drop-and-create-tables");
-        eclipseLinkProps.setProperty("eclipselink.ddl-generation.output-mode", "database");
-        eclipseLinkProps.setProperty("eclipselink.weaving", "false");
-        eclipseLinkProps.setProperty("eclipselink.logging.level", "FINEST");
-        // flag for shared entity manager factory.
-        eclipseLinkProps.setProperty("eclipselink.multitenant.tenants-share-emf", "false");
-        eclipseLinkProps.setProperty("tenant.id", "LEA");
-        return eclipseLinkProps;
-    }
-
 }

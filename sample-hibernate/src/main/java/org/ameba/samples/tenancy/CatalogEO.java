@@ -32,16 +32,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since 1.0
  */
 @Entity
-@Table(name="T_CATALOG")
+@Table(name = "T_CATALOG")
 public class CatalogEO implements Serializable {
 
     @JsonProperty
     @Id
     @GeneratedValue
-    @Column(name="C_PK")
+    @Column(name = "C_PK")
     private Long id;
 
     @JsonProperty
-    @Column(name="C_VERSION")
+    @Column(name = "C_VERSION")
     private String version;
 }

@@ -24,6 +24,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @version 1.0
  * @since 1.0
  */
-interface CatalogRepository extends JpaRepository<CatalogEO, Long>{
+interface CatalogRepository extends JpaRepository<CatalogEO, Long> {
 
 }
