@@ -16,7 +16,7 @@ environment.
 
 ## How it works
 Configuration and usage of the Discriminator Column Value Based strategy (DCVB) is straightforward. At first we have to
-annotate all entity classes that are *tenant aware* with an `@Multitenant` annotation. This annotation allows use to
+annotate all entity classes that are *tenant aware* with an `@Multitenant` annotation. This annotation allows us to
 define a separation strategy. The default strategy `MultitenantType.SINGLE_TABLE` fits our requirements. As next we've
 to tell EclipseLink the name of the discriminator column to use. This can be done in several ways, we're fine with
 putting more EclipseLink specific annotations on our entity classes:
@@ -25,7 +25,7 @@ putting more EclipseLink specific annotations on our entity classes:
 @TenantDiscriminatorColumn(name = "C_TENANT_ID", contextProperty = TenantHolder.TENANT_ID)
 ```
 
-Worth to notice is the `contextProperty` attribute of the annotation. This tells EclipseLink to take the tenant identifier
+Important to notice is the `contextProperty` attribute of the annotation. This tells EclipseLink to take the tenant identifier
 information from the configured JPA properties that are used to create the `EntityManagerFactory` at application _startup_.
 
 ```java
@@ -39,14 +39,13 @@ information from the configured JPA properties that are used to create the `Enti
     }
 ```
 
-Further details of the configuration parameters in `org.eclipse.persistence.config.PersistenceUnitProperties` can be
-taken from the Javadocs.
+You find further details of the configuration parameters in the Javadoc of `org.eclipse.persistence.config.PersistenceUnitProperties`.
 
 ## Restrictions
 
 At application _startup_. This is not what we want. We need to pass the current tenant dynamically to EclipseLink
-depending on the tenant identifier we get with each http request. One can argue, that we can create new `EntityManagerFactory`s
-on the fly, cache them within a map and grab the one for the current tenant. This would work in a plain JPA environment,
+depending on the tenant identifier we get with each http request. One can argue, that we could create new `EntityManagerFactory`s
+on the fly, cache them within a map and grab the one for the current tenant. This would work with pure JPA,
 but as we're using Spring Data JPA, we need to pass the correct `EntityManagerFactory` to Spring Data at application
 startup in order to build the repositories properly.
 
@@ -65,7 +64,7 @@ INSERT INTO T_CATALOG (C_PK, C_VERSION, C_TENANT_ID) VALUES (?, ?, ?)
 ```
 
 EclipseLink recognizes that our entity class is tenant aware and adds the tenant identifier to the insert statement. The
-same is true when getting back the data from the database.
+same is true when getting the data from the database. EclipseLink appends the query string with the tenant identifier,
 
 ```
 SELECT C_PK, C_TENANT_ID, C_VERSION FROM T_CATALOG WHERE (C_TENANT_ID = ?)
