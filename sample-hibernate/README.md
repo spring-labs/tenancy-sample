@@ -80,3 +80,13 @@ java.lang.NullPointerException: null
 	at org.hibernate.internal.SessionImpl.connection(SessionImpl.java:488) ~[hibernate-core-5.0.4.Final.jar:5.0.4.Final]
 ```
 
+## Patch Required
+
+With the configuration above, Hibernate tries to obtain a jdbc connection from a `MultiTenantConnectionProvider`. But
+this fails with a NPE because a `MultiTenantConnectionProvider` is not the `ConnectionProvider` implementaion for
+environments like the Discriminator Column Value Based strategies (DCVB).
+Separating user data based on a discriminator column value does not depend on the underlying JDBC connection. In contrast a Database or Scheme separating strategy
+rely on the underlying JDBC connection, because those strategies have to modify the connection parameters itself But XXX.
+So we rely on top of this,
+
+*
