@@ -30,7 +30,7 @@ on Database or Schema level is sufficient for most applications. Whereas separat
 the more exotic strategy. As often, it depends on your requirements on multitenany which strategy to use.
 
 ## Sample App Requirements
-The following requirements are taken from our Stamplets project and were applied to both sample applications.
+The following requirements are taken from our Stamplets project and are applied to both sample applications.
 
 **R1**: The system must separate persisted data based on tenant information (sent by the client). Some data (database tables)
 must be shared across all tenants, whereas other data is kept dedicated to the current identified tenant.

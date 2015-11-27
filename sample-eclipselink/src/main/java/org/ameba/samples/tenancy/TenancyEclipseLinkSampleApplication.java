@@ -77,7 +77,6 @@ public class TenancyEclipseLinkSampleApplication {
         factory.getJpaPropertyMap().put(PersistenceUnitProperties.DDL_GENERATION_MODE, PersistenceUnitProperties.DDL_DATABASE_GENERATION);
         factory.getJpaPropertyMap().put(PersistenceUnitProperties.LOGGING_LEVEL, "FINE");
         factory.getJpaPropertyMap().put(PersistenceUnitProperties.WEAVING, "false");
-        factory.getJpaPropertyMap().put(PersistenceUnitProperties.MULTITENANT_SHARED_EMF, "false");
         factory.getJpaPropertyMap().put(TenantHolder.TENANT_ID, TenantHolder.getTenant());
         factory.afterPropertiesSet();
         return factory.getObject();
