@@ -13,7 +13,7 @@ environment.
 ## Known Issues
 
 | Desc | Link |
-|;---- |:---- |
+|:---- |:---- |
 | Current state of dev. | https://hibernate.atlassian.net/browse/HHH-6054 |
 
 ## Technologies and frameworks used:
