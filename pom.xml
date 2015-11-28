@@ -39,7 +39,7 @@
         <spring-data-releasetrain.version>Gosling-RELEASE</spring-data-releasetrain.version>
 
         <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
-        <ameba-lib.version>0.9.1-SNAPSHOT</ameba-lib.version>
+        <ameba-lib.version>0.9</ameba-lib.version>
     </properties>
 
     <build>
