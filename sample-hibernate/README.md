@@ -103,7 +103,7 @@ must be properly setup to point to the right database or database schema. We nee
 ```
 
 When you go through the source code of Hibernate you often find these comparisons against the `MultiTenancyStrategy`.
-Seems like multitenancy support is already considered at many places. But in fact it is not implemented finally.
+Seems like multitenancy support is already considered at many places. But in fact it is not finally implemented.
 
 ## Whats missing?
 
