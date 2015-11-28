@@ -16,7 +16,7 @@ environment.
 |:---- |:---- |
 | Current state of dev. | https://hibernate.atlassian.net/browse/HHH-6054 |
 
-## Technologies and frameworks used:
+## Technologies and frameworks
 
 - A patched version of Hibernate 5.0.4
 

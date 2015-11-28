@@ -10,7 +10,7 @@ environment.
 |:---- |:---- |
 | Solutions Guide, ch.14 | http://www.eclipse.org/eclipselink/documentation/2.6/solutions/multitenancy.htm#CHDBJCJA |
 
-## Technologies and frameworks used:
+## Technologies and frameworks
 
 - EclipseLink 2.6.1
 
